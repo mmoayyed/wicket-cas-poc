@@ -101,6 +101,11 @@
             <artifactId>cas-server-core-webflow</artifactId>
             <version>${cas.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.apereo.cas</groupId>
+            <artifactId>cas-server-core-events-configuration</artifactId>
+            <version>${cas.version}</version>
+        </dependency>
 
         <!-- Support Dependencies -->
         <dependency>
@@ -110,7 +115,17 @@
         </dependency>
         <dependency>
             <groupId>org.apereo.cas</groupId>
+            <artifactId>cas-server-support-ldap</artifactId>
+            <version>${cas.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apereo.cas</groupId>
             <artifactId>cas-server-support-reports</artifactId>
+            <version>${cas.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apereo.cas</groupId>
+            <artifactId>cas-server-support-saml</artifactId>
             <version>${cas.version}</version>
         </dependency>
         <dependency>
@@ -133,8 +148,18 @@
             <artifactId>cas-server-support-pm-webflow</artifactId>
             <version>${cas.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.apereo.cas</groupId>
+            <artifactId>cas-server-support-pac4j-webflow</artifactId>
+            <version>${cas.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apereo.cas</groupId>
+            <artifactId>cas-server-support-configuration-cloud-rest</artifactId>
+            <version>${cas.version}</version>
+        </dependency>
 
-        
+        <!-- Webapp Dependencies -->
         <dependency>
             <groupId>org.apereo.cas</groupId>
             <artifactId>cas-server-webapp-config</artifactId>
@@ -249,14 +274,12 @@
     <build>
         <resources>
             <resource>
-                <filtering>false</filtering>
                 <directory>src/main/resources</directory>
             </resource>
             <resource>
-                <filtering>false</filtering>
                 <directory>src/main/java</directory>
                 <includes>
-                    <include>**/*.html</include>
+                    <include>**</include>
                 </includes>
                 <excludes>
                     <exclude>**/*.java</exclude>
@@ -286,16 +309,10 @@
         </plugins>
     </build>
 
-    <distributionManagement>
-        <snapshotRepository>
-            <id>apache.snapshots</id>
-            <name>Apache Development Snapshot Repository</name>
-            <url>https://repository.apache.org/content/repositories/snapshots/</url>
-        </snapshotRepository>
+    <repositories>
         <repository>
-            <id>ossrh</id>
-            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+            <id>shibboleth-releases</id>
+            <url>https://build.shibboleth.net/nexus/content/repositories/releases</url>
         </repository>
-    </distributionManagement>
-    
+    </repositories>
 </project>
