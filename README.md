@@ -89,7 +89,9 @@ and themes. While Thymeleaf itself can be extracted in favor of another templati
 The following alternatives are far better choices:
 
 - **Use Thymeleaf as is provided by CAS**; remove custom, duplicate code and only customize what is necessary.
+
 Or
+
 - Use an *actual templating engine* instead of Thymeleaf whose auto-configuration, support and maintenance is backed by an active community.
 
 ## Refreshability
