@@ -41,7 +41,7 @@ of the CAS ecosystem, one could design an identity provider with what is require
 like making a pizza!
 
 For this demo, we have included several configuration modules
-and extensions into the build the most important of which are:
+and extensions into the build, most important of which are:
 
 - CAS protocol support
 - SAML1 protocol support
@@ -77,7 +77,7 @@ Several other views/templates that are specific to aspects of *a given protocol*
 
 ## Apache Wicket for the View Layer
 
-Apereo CAS primarily and very heavily operates and orchestrates the authentication flows using a combination of Spring Webflow and Thymeleaf. Thymeleaf support and auto-configuration is provided by Spring Boot automatically, which is used by CAS to handle he user interface, branding
+Apereo CAS primarily and very heavily operates and orchestrates the authentication flows using a combination of Spring Webflow and Thymeleaf. Thymeleaf support and auto-configuration is provided by Spring Boot automatically, which is used by CAS to handle the user interface, branding
 and themes. While Thymeleaf itself can be extracted in favor of another templating engine such FreeMarker, Apache Velocity (also deprecated and removed from Spring), Groovy, Mustache, etc, using Apache Wicket as the view engine with CAS will, in the long-term makes things *significantly and unnecessarily complicated*:
 
 - Apache Wicket integration with Spring Boot is not a native module and is provided via a 3rd-party addon. Not a big deal per se; just worth pointing out.
