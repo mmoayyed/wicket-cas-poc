@@ -11,15 +11,17 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import de.agilecoders.wicket.webjars.request.resource.WebjarsJavaScriptResourceReference;
 
+import java.util.HashMap;
 import java.util.Map;
 
 public abstract class BasePage extends WebPage {
 
     private MarkupContainer defaultModal;
-    private Map<String, Object> viewModel;
+    private Map<String, Object> viewModel = new HashMap<>();
 
-    public BasePage(PageParameters params){
+    public BasePage(PageParameters params, Map<String, Object> viewModel){
         super(params);
+        this.viewModel = viewModel;
         initPage();
     }
 
@@ -50,7 +52,7 @@ public abstract class BasePage extends WebPage {
         response.render(CssHeaderItem.forReference(new WebjarsJavaScriptResourceReference(bootstrapPrefixPath + "/css/bootstrap.css")));
     }
 
-    public  void setViewModule(final Map<String, Object> map){
-        this.viewModel = map;
+    public Map<String, Object> getViewModel() {
+        return viewModel;
     }
 }

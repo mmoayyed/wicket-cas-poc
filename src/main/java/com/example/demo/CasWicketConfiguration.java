@@ -6,7 +6,6 @@ import org.apereo.cas.util.DateTimeUtils;
 import org.apereo.cas.validation.CasProtocolViewFactory;
 
 import com.example.demo.pages.CasLoginPage;
-import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.wicket.DefaultExceptionMapper;
 import org.apache.wicket.ThreadContext;
@@ -18,6 +17,8 @@ import org.apache.wicket.protocol.http.servlet.ServletWebResponse;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.cycle.RequestCycleContext;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
@@ -36,8 +37,9 @@ import java.util.List;
 import java.util.Map;
 
 @Configuration
-@Slf4j
 public class CasWicketConfiguration {
+    private final Logger log = LoggerFactory.getLogger(this.getClass());
+    
     @Bean
     public CasProtocolViewFactory casProtocolViewFactory() {
         return new WicketCasProtocolViewFactory();
@@ -93,8 +95,7 @@ public class CasWicketConfiguration {
             ThreadContext.setRequestCycle(new RequestCycle(context));
             PageParameters parameters = new PageParameters();
             parameters.set("flowExecutionKey", map.get("flowExecutionKey"));
-            CasLoginPage page = new CasLoginPage(parameters);
-            page.setViewModule(map);
+            CasLoginPage page = new CasLoginPage(parameters, map);
             PageProvider pageProvider = new PageProvider(page);
             CharSequence result = ComponentRenderer.renderPage(pageProvider);
             try (var writer = new BufferedWriter(response.getWriter())) {
