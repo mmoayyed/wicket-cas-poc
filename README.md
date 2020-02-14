@@ -80,7 +80,7 @@ Several other views/templates that are specific to aspects of *a given protocol*
 Apereo CAS primarily and very heavily operates and orchestrates the authentication flows using a combination of Spring Webflow and Thymeleaf. Thymeleaf support and auto-configuration is provided by Spring Boot automatically, which is used by CAS to handle he user interface, branding
 and themes. While Thymeleaf itself can be extracted in favor of another templating engine such FreeMarker, Apache Velocity (also deprecated and removed from Spring), Groovy, Mustache, etc, using Apache Wicket as the view engine with CAS will, in the long-term makes things *significantly and unnecessarily complicated*:
 
-- Apache Wicket integration with Spring Boot is not a native module and is provided via a 3rd-party addon. 
+- Apache Wicket integration with Spring Boot is not a native module and is provided via a 3rd-party addon. Not a big deal per se; just worth pointing out.
 - Apache Wicket is not a templating engine, as CAS would expect auto-configured via Spring Boot. No built-in `ViewResolver` is available.
 - The current `ViewResolver` machinery requires one to render pages out of band, forcefully, before presenting content back. This is unnecessary, prone to error, and a long-term maintenance headache causing early agism and fair amount of hair loss.
 - Custom code is required to translate model data produced by CAS from Spring Webflow over to Apache Wicket pages and page-parameters. This item makes the solution very unattractive.
