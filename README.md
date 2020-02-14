@@ -1,4 +1,4 @@
-# CAS POC
+# Embedded CAS Server with Apache Wicket - POC
 
 # Overview
 
