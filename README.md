@@ -82,7 +82,7 @@ and themes. While Thymeleaf itself can be extracted in favor of another templati
 
 - Apache Wicket integration with Spring Boot is not a native module and is provided via a 3rd-party addon. 
 - Apache Wicket is not a templating engine, as CAS would expect auto-configured via Spring Boot. No built-in `ViewResolver` is available.
-- The current `ViewResolver` machinery requires one to render pages out of band, forcefully, before presenting content back. This is unnecessary, prone to error, and long-term maintenance headaches.
+- The current `ViewResolver` machinery requires one to render pages out of band, forcefully, before presenting content back. This is unnecessary, prone to error, and a long-term maintenance headache causing early agism and fair amount of hair loss.
 - Custom code is required to translate model data produced by CAS from Spring Webflow over to Apache Wicket pages and page-parameters. This item makes the solution very unattractive.
 - Most if not all CAS views need to be re-implemented in Apache Wicket form, which makes maintenance very difficult, security risk and upgrades prone to error. Also, duplicating views in Wicket increases the risk breaking changes as CAS views are updated, added or removed, since such things are not considered part of a public API. 
 
