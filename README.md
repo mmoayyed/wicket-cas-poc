@@ -75,3 +75,15 @@ As an example, we have a `CasLoginPage` wicket page that responds to the `/login
 
 A number of other views/templates that are specific to aspects of *a given protocol*, mainly CAS itself, (not the software but the protocol itself) that are typically backed by Thymeleaf are also extracted out and are expected to be designed and rendered using Apache Wicket. For this purpose, we are injecting a `WicketCasProtocolViewFactory` into the runtime that is tasked to create `View` objects to render protocol-specific templates such as the validation/failure payloads rendered by the CAS protocol itself.
 
+# Lessons Learned
+
+## Apache Wicket for the View Layer
+
+Apereo CAS primarily and very heavily operates and orchestrates the authentication flows using a combination of Spring Webflow and Thymeleaf. Thymeleaf support and auto-configuration is provided by Spring Boot automatically, which is used by CAS to handle he user interface, branding
+and themes. While Thymeleaf itself can be extracted in favor of another templating engine such FreeMarker, Apache Velocity, Groovy, Mustache, etc, using Apache Wicket as the view engine with CAS will, in the long-term makes things *significantly and unnecessarily complicated*:
+
+- Apache Wicket integration with Spring Boot is not a native module, and is provided via a 3rd-party addon. 
+- Apache Wicket is really not a templating engine, as CAS would expect auto-configured via Spring Boot.
+- The current `ViewResolver` machinery requires one to render pages out of band, forcefully, before presenting content back. This is unnecessary, prone to error, and long-term maintenance headaches.
+- Custom code is required to translate model data produced by CAS from Spring Webflow over to Apache Wicket pages and page-parameters.
+- Most if not all CAS views need to be re-implemented in Apache Wicket form, which makes maintenance very difficult, security a risk and upgrades prone to error. Also, duplicating views in Wicket increases the risk breaking changes as CAS views are updated, added or removed, since such things are not considered part of a public API. 
