@@ -21,7 +21,7 @@ Execute:
 ```
 
 The application should be available under `http://localhost:8080/login`. To simulate a CAS protocol login request,
-you may start with something like `http://localhost:8080/login?service=https://app.example.org`, login with the credentials
+you may start with something like `http://localhost:8080/login?service=https://app.example.org`, log in with the credentials
 provided and be issued a service ticket request. 
 
 Additional endpoints are also available depending on the availability of modules included in the build. For example, 
@@ -34,7 +34,7 @@ Spring Actuator endpoints some of which are provided by CAS are also found at `h
 
 ## Baseline
 
-The CAS server itself is composed to many individual modules each of which provide a specific type of functionality
+The CAS server itself is composed of many individual modules each of which provides a specific type of functionality
 that is then activated using Spring Boot's `@AutoConfiguration` strategy. Some modules are required (typically in the `core`)
 category while others are optional and provide extra functionality (typically in the `support` category). By assembling bits and pieces
 of the CAS ecosystem, one could design an identity provider with what is required for an access management deployment, much
@@ -54,10 +54,8 @@ and extensions into the build the most important of which are:
 - [Configuration management via REST](https://github.com/mmoayyed/cas-poc-restful-config)
 - Many others...
 
-Typically, adding additional functinality is as simple as including the module in the build. Once the module is included,
-its behavior can be altered using Spring Cloud and `@RefreshScope`. Components in CAS that can be refreshed are marked 
-with `@RefreshScope`. Not everything is refreshable, and improvements can be made incrementally 
-to mark and tag components for reloadability.
+Typically, adding additional functionality is as simple as including the module in the build. Once the module is included,
+its behavior can be altered using Spring Cloud and `@RefreshScope`. Components in CAS that can be refreshed are marked with `@RefreshScope`. Not everything is refreshable, and improvements can be made incrementally to mark and tag components for reloadability.
 
 ## Differences
 
@@ -73,7 +71,7 @@ As an example, we have a `CasLoginPage` wicket page that responds to the `/login
 
 ### Protocol Views
 
-A number of other views/templates that are specific to aspects of *a given protocol*, mainly CAS itself, (not the software but the protocol itself) that are typically backed by Thymeleaf are also extracted out and are expected to be designed and rendered using Apache Wicket. For this purpose, we are injecting a `WicketCasProtocolViewFactory` into the runtime that is tasked to create `View` objects to render protocol-specific templates such as the validation/failure payloads rendered by the CAS protocol itself.
+Several other views/templates that are specific to aspects of *a given protocol*, mainly CAS itself, (not the software but the protocol itself) that are typically backed by Thymeleaf are also extracted out and are expected to be designed and rendered using Apache Wicket. For this purpose, we are injecting a `WicketCasProtocolViewFactory` into the runtime that is tasked to create `View` objects to render protocol-specific templates such as the validation/failure payloads rendered by the CAS protocol itself.
 
 # Lessons Learned
 
@@ -82,11 +80,11 @@ A number of other views/templates that are specific to aspects of *a given proto
 Apereo CAS primarily and very heavily operates and orchestrates the authentication flows using a combination of Spring Webflow and Thymeleaf. Thymeleaf support and auto-configuration is provided by Spring Boot automatically, which is used by CAS to handle he user interface, branding
 and themes. While Thymeleaf itself can be extracted in favor of another templating engine such FreeMarker, Apache Velocity (also deprecated and removed from Spring), Groovy, Mustache, etc, using Apache Wicket as the view engine with CAS will, in the long-term makes things *significantly and unnecessarily complicated*:
 
-- Apache Wicket integration with Spring Boot is not a native module, and is provided via a 3rd-party addon. 
+- Apache Wicket integration with Spring Boot is not a native module and is provided via a 3rd-party addon. 
 - Apache Wicket is not a templating engine, as CAS would expect auto-configured via Spring Boot. No built-in `ViewResolver` is available.
 - The current `ViewResolver` machinery requires one to render pages out of band, forcefully, before presenting content back. This is unnecessary, prone to error, and long-term maintenance headaches.
-- Custom code is required to translate model data produced by CAS from Spring Webflow over to Apache Wicket pages and page-parameters. This item really makes the solution very unattractive.
-- Most if not all CAS views need to be re-implemented in Apache Wicket form, which makes maintenance very difficult, security a risk and upgrades prone to error. Also, duplicating views in Wicket increases the risk breaking changes as CAS views are updated, added or removed, since such things are not considered part of a public API. 
+- Custom code is required to translate model data produced by CAS from Spring Webflow over to Apache Wicket pages and page-parameters. This item makes the solution very unattractive.
+- Most if not all CAS views need to be re-implemented in Apache Wicket form, which makes maintenance very difficult, security risk and upgrades prone to error. Also, duplicating views in Wicket increases the risk breaking changes as CAS views are updated, added or removed, since such things are not considered part of a public API. 
 
 The following alternatives are far better choices:
 
@@ -96,7 +94,14 @@ Or
 
 ## Refreshability
 
-The CAS server has baked in strategies to auto-configure and bootstrap itself via REST APIs. The bootstrapping process feeds values to Spring Beans at initialization time to auto-configure components and register them in the application context. However, when it comes to managing dynamic states and values using an external configuration store, such beans need to be refreshed and the application context must be renewed. This is handled automatically by Spring Cloud and beans that declare their support for refreshability using `@RefreshScope`. Not everything, of course, can be refreshable, specially components that require serializability since refresh-scope creates proxies around components via cglib. So while most components are marked as refreshable, additional testing effort and modest improvements may be required to adjust support for dynamic state.
+The CAS server has baked in strategies to auto-configure and bootstrap itself via REST APIs. The bootstrapping process feeds values to Spring Beans at initialization time to auto-configure components and registers them in the application context. However, when it comes to managing dynamic states and values using an external configuration store, such beans need to be refreshed and the application context must be renewed. This is handled automatically by Spring Cloud and beans that declare their support for refreshability using `@RefreshScope`. Not everything, of course, can be refreshable, especially components that require serializability since refresh-scope creates proxies around components via cglib. So while most components are marked as refreshable, additional testing effort and modest improvements may be required to adjust support for the dynamic state.
 
 This is generally not a big deal; just worth pointing out.
 
+## Other Alternative
+
+It is possible to use CAS server components in a way to exclude Thymeleaf, Spring Webflow and purely use the server's components that provide protocol support while building the authentication flow and the rest of the logic separately. This approach, while plausible in theory, has several serious drawbacks:
+
+- While technically possible on paper, it is evidently unnecessary. There is really no good answer to the "But Why?" question.
+- It, quite likely, requires a HIOOOGE refactoring effort on part of the CAS server to completely reorganize components to detach themselves from Spring Webflow and family.
+- In doing so, the CAS server purely turns into a framework/library and loses much of its advantage. There are plenty of other libraries available, on top of which protocol and authentication support can be built.
