@@ -3,7 +3,7 @@
 # Overview
 
 This is a modest POC to demonstrate how a given CAS server can be *embedded* inside a Spring Boot application
-to act as an identity provider while still presenting functionality and protocol support as a standalone CAS server would. 
+to act as an identity provider while still presenting functionality and protocol support as a standalone CAS server would. The view layer and framework is, *experimentally*, chosen to be Apache Wicket.
 
 # Versions
 
