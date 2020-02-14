@@ -98,7 +98,7 @@ The CAS server has baked in strategies to auto-configure and bootstrap itself vi
 
 This is generally not a big deal; just worth pointing out.
 
-## Other Alternative
+# Other Alternatives
 
 It is possible to use CAS server components in a way to exclude Thymeleaf, Spring Webflow and purely use the server's components that provide protocol support while building the authentication flow and the rest of the logic separately. This approach, while plausible in theory, has several serious drawbacks:
 
